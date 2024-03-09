@@ -1,0 +1,15 @@
+[
+    {
+        "message": "ewqeq",
+        "sender": "user"
+    },
+    {
+        "message": "Please ask a question that is relevant to the renewable energy project in rural areas.",
+        "sender": "bot"
+    },
+    {
+        "sender": "user",
+        "message": "It is my final answer\r\n",
+        "final": true
+    }
+]

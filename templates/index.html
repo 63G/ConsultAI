@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Chatbot</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar-custom {
+            background-color: #4a148c94;
+            box-shadow: 0 7px 12px rgba(0, 0, 0, 0.459);
+            padding: 10px 50px;
+        }
+        .navbar-brand img {
+            height: 30px; /* Larger logo for better visibility */
+            /* width: 90px; */
+            width: auto;
+            transition: transform 0.3s ease;
+            transform: scale(3.14);
+        }
+        .navbar-brand:hover img {
+            transform: scale(3.44); /* Slight zoom on hover for a dynamic effect */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-nav .nav-link {
+            color: #e0e0e0;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            height: 600px;
+            margin: auto;
+            margin-top: 20px; /* Adjusted for navbar */
+            background-color: #242424;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+        }
+        .message {
+            margin: 5px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: #4a148c;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background-color: #00695c;
+        }
+        .input-group {
+            width: 100%;
+        }
+        .maker-credit {
+            text-align: center;
+            color: #b3b3b3;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+        .btn-smaller {
+            padding: 5px 10px;
+            font-size: 14px;
+            margin-top: 10px;
+            background-color: #4a148c; /* Theme color */
+            color: white; /* Text color */
+            border-radius: 20px; /* Rounded edges */
+            border: none; /* Remove default border */
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+
+        .btn-smaller:hover {
+            background-color: #6a1b9a; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <a class="navbar-brand" href="#">Case Interview AI Chatbot</a>
+    </nav>
+
+    <div id="user-form-container" class="chat-container">
+        <form id="user-form">
+            <div class="form-group">
+                <label for="user-name" class="text-light">Name:</label>
+                <input type="text" class="form-control" id="user-name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="user-id" class="text-light">ID:</label>
+                <input type="text" class="form-control" id="user-id" placeholder="Enter your ID" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Start Interview</button>
+        </form>
+    </div>
+
+    <div id="chat-container" class="chat-container" style="display: none;">
+        <div id="chat-box" class="chat-box d-flex flex-column"></div>
+        <div class="input-group">
+            <input type="text" id="user-input" class="form-control" placeholder="Type your message..." aria-label="Recipient's username" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    <button onclick="window.location.href='/submit_final'" class="btn btn-secondary mt-2">Submit Final Answer</button>
+
+
+    </div>
+
+    <div class="maker-credit">
+        Created by Muath F Alsubhi
+        <a href="www.linkedin.com/in/muath-alsubhi" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/f6c4f8b384.js" crossorigin="anonymous"></script>
+
+<!--    JS LOGIC -->
+    <script>
+
+        let chatLog = []; // Initialize an empty array to store chat interactions
+        // Function to log and display messages
+        function sendMessage() {
+            var message = $('#user-input').val().trim();
+            if (message === '') return;
+            logAndDisplayMessage(message, 'user'); // Log user messages
+            $('#user-input').val('');
+
+            $.post('/ask', {message: message}, function(data) {
+                logAndDisplayMessage(data.message, 'bot'); // Log bot responses
+            });
+        }
+            // Updated function to handle both logging and displaying messages
+        function logAndDisplayMessage(message, sender) {
+            var messageType = sender === 'user' ? 'user-message' : 'bot-message';
+            var messageElement = `<div class="message ${messageType}">${message}</div>`;
+            $('#chat-box').append(messageElement);
+            $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+
+            // Add the message to the chat log
+            chatLog.push({ sender, message });
+        }
+        // Function to collect user name and ID, and initialize the chat session
+        $('#user-form').submit(function(event) {
+            event.preventDefault();
+            var userName = $('#user-name').val().trim();
+            var userId = $('#user-id').val().trim();
+
+            if (userName === '' || userId === '') {
+                alert('Please enter both your name and ID.');
+                return;
+            }
+
+            // Log user name and ID at the beginning of the chatLog
+            chatLog.push({ userName, userId });
+
+            $('#user-form-container').hide();
+            $('#chat-container').show();
+
+            // displayIntroMessage();
+        });
+
+        function displayMessage(message, sender) {
+            var messageType = sender === 'user' ? 'user-message' : 'bot-message';
+            var messageElement = `<div class="message ${messageType}">${message}</div>`;
+            $('#chat-box').append(messageElement);
+            $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+        }
+
+        function displayIntroMessage() {
+            const introMessage = "Hello, welcome to the Renewable Energy Project Interview Chatbot! This case study focuses on the development and implementation of renewable energy solutions, specifically solar panels and wind turbines, in a rural setting. It aims to address the energy needs of rural communities sustainably. We explore various aspects such as planning, environmental impact assessments, community involvement, and long-term sustainability of the projects. Please feel free to ask any questions related to these topics.\n";
+            displayMessage(introMessage, 'bot');
+        }
+
+$('#user-form').submit(function(event) {
+    event.preventDefault();
+    var userName = $('#user-name').val().trim();
+    var userId = $('#user-id').val().trim();
+
+    if (userName === '' || userId === '') {
+        alert('Please enter both your name and ID.');
+        return;
+    }
+    // Send the user details to the server to store in the session
+    $.ajax({
+        url: '/start_chat',
+        type: 'POST',
+        data: {
+            userName: userName,
+            userId: userId
+        },
+        success: function(response) {
+            $('#user-form-container').hide();
+            $('#chat-container').show();
+            displayIntroMessage();
+        },
+        error: function() {
+            alert('Failed to start the chat session. Please try again.');
+        }
+    });
+});
+
+
+        $(document).ready(function() {
+            // Optionally keep this if you want the intro message to show immediately for returning users
+            // displayIntroMessage();
+        });
+
+        $("#user-input").keypress(function(e) {
+            if (e.which == 13) { // Enter key
+                sendMessage();
+            }
+        });
+
+        // Function to handle end of chat session or periodically send chatLog to the server
+        function sendChatLogToServer() {
+            var chatLogJson = JSON.stringify(chatLog);
+
+            $.post('/save_chat_log', {chatLog: chatLogJson}, function(response) {
+                // alert('Chat log submitted successfully!');
+                // redirect the user after submission
+                // window.location.href = '/submit_final';
+                console.log(response);
+            }).fail(function() {
+                alert('Failed to submit chat log.');
+            });
+        }
+
+        // Event listener for the submit button
+        $('#submit-chat-log').click(function() {
+            sendChatLogToServer();
+            window.location.href = '/submit_final';
+        });
+
+        // Initialize the chat or form submission process
+        $(document).ready(function() {
+            // Your existing setup, like displayIntroMessage, etc.
+        });
+    </script>
+</body>
+</html>

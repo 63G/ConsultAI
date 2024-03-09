@@ -1,0 +1,15 @@
+[
+    {
+        "message": "I love money",
+        "sender": "user"
+    },
+    {
+        "message": "That's great, however, what we are looking for in this project is a sustainable solution that benefits both the community and the environment. How do you see your financial interests aligning with these goals?",
+        "sender": "bot"
+    },
+    {
+        "sender": "user",
+        "message": "do you love money?\r\n",
+        "final": true
+    }
+]

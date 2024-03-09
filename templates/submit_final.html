@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Final Answer</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+                font-family: Arial, sans-serif;
+            }
+            .container {
+                max-width: 800px;
+                margin: auto;
+                margin-top: 50px;
+            }
+            .form-control, .btn-primary {
+                background-color: #242424;
+                border: 3px solid #0d0c0c;
+                color: #e0e0e0;
+            }
+            /* Add this to ensure the background color remains dark on focus */
+            .form-control:focus {
+                background-color: #242424;
+                border-color: #6a1b9a;
+                color: #e0e0e0;
+                box-shadow: none; /* Optional: removes the default Bootstrap shadow if desired */
+            }
+            .btn-primary {
+                background-color: #4a148c;
+            }
+            .btn-primary:hover {
+                background-color: #6a1b9a;
+            }
+            label {
+                color: #e0e0e0;
+            }
+                .maker-credit {
+            text-align: center;
+            color: #b3b3b3;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Final Answer Submission</h2>
+        <h5 style="color: rebeccapurple">Final answer must be a structure that you communicate clearly with a case summary</h5>
+        <p>Please enter your final answer below:</p>
+        <form action="/process_final_answer" method="post">
+            <div class="form-group">
+                <label for="finalAnswer">Final Answer:</label>
+                <textarea class="form-control" id="finalAnswer" name="finalAnswer" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="maker-credit">
+        Created by Muath F Alsubhi
+        <a href="www.linkedin.com/in/muath-alsubhi" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/f6c4f8b384.js" crossorigin="anonymous"></script>
+</body>
+</html>

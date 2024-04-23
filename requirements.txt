@@ -1,3 +1,2 @@
-Flask==2.0.1
-openai
-spacy==3.0
+Flask==1.1.2
+openai==1.12.0
